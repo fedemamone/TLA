@@ -22,7 +22,14 @@ char * reducirNodoVariable(Nodo * nodo) {
   char * nombre = ((NodoVariable *)nodo)->variable;
   char * longitudPuntuacion = "!";
   char * nuevaVariable = calloc(strlen(nombre) + strlen(longitudPuntuacion) + 1, sizeof(char));
-
+  
+  //agregado con agregado de tipoAlmacenado
+  if(((NodoVariable *)nodo)->almacenado->tipo == NODO_CONSTANTE)
+    strcpy(nuevaVariable, "int");
+  else
+    strcpy(nuevaVariable, "char* ");
+  //impacta en lo comentado en reducirNodoOperacion
+  
   strcpy(nuevaVariable, nombre);
   strcat(nuevaVariable, "!");
 
@@ -39,19 +46,19 @@ char * reducirNodoOperacion(Nodo * nodo) {
 
   
   if (nodoValor->primero->tipo == NODO_VARIABLE && strcmp(nodoValor->operador, "=") == 0) {
-      if (nodoValor->segundo->tipo == NODO_CADENA) {
-        const size_t tipoLongitud = strlen("char* ");
+      //if (nodoValor->segundo->tipo == NODO_CADENA) {
+        //const size_t tipoLongitud = strlen("char* ");
         const size_t bufferLongitud = strlen(primero) + strlen(operador) + strlen(segundo) + tipoLongitud + 2;
         char * buffer = malloc(bufferLongitud);
-        snprintf(buffer, bufferLongitud, "char* %s%s%s",primero, operador, segundo);
+        snprintf(buffer, bufferLongitud, "%s%s%s",primero, operador, segundo);
         return buffer;
-      }
-      else {
-        const size_t tipoLongitud = strlen("int ");
-        const size_t bufferLongitud = strlen(primero) + strlen(operador) + strlen(segundo) + tipoLongitud + 2;
-        char * buffer = malloc(bufferLongitud);
-        snprintf(buffer, bufferLongitud, "int %s%s%s",primero, operador, segundo);
-        return buffer;
+      //}
+      //else {
+        //const size_t tipoLongitud = strlen("int ");
+        //const size_t bufferLongitud = strlen(primero) + strlen(operador) + strlen(segundo) + tipoLongitud + 2;
+        //char * buffer = malloc(bufferLongitud);
+        //snprintf(buffer, bufferLongitud, "int %s%s%s",primero, operador, segundo);
+        //return buffer;
       }
   } else {
     const size_t delimitadorLongitud = strlen("()");
@@ -186,7 +193,9 @@ char * reducirImprimir(Nodo * nodo) {
   
   char * parametroPrintf;
   
-  if(nodoValor->expresion->tipo == NODO_CADENA)
+  NodoVariable variable = nodoValor->expresion;
+  
+  if(variable->almacenado->tipo == NODO_CADENA)
     parametroPrintf = "%s";
   else
     parametroPrintf = "%d";
@@ -194,7 +203,7 @@ char * reducirImprimir(Nodo * nodo) {
   const size_t delimitadorLongitud = strlen("printf('', )") + 2; //2 de %s o %d
   const size_t bufferLongitud = strlen(expresion) + delimitadorLongitud + 1;
   char * buffer = malloc(bufferLongitud, sizeof(char));
-  snprintf(buffer, bufferLongitud, "printf('%s', %s)", parametroPrintf,expresion); //Hay que decirle agarra el segundo %s
+  snprintf(buffer, bufferLongitud, "printf('%s', %s)", parametroPrintf, expresion);
 
   return buffer;
 }

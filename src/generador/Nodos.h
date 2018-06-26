@@ -37,7 +37,7 @@ typedef struct NodoConstante {
 
 typedef struct NodoVariable {
   tipoNodo tipo;
-  tipoNodo tipoAlmacenado;
+  Nodo * almacenado;
   char * variable;
 } NodoVariable;
 

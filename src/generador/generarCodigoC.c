@@ -39,7 +39,7 @@ char * reducirNodoOperacion(Nodo * nodo) {
 
   
   if (nodoValor->primero->tipo == NODO_VARIABLE && strcmp(nodoValor->operador, "=") == 0) {
-      if (nodoValor->segundo->tipo == NodoCadena) {
+      if (nodoValor->segundo->tipo == NODO_CADENA) {
         const size_t tipoLongitud = strlen("char* ");
         const size_t bufferLongitud = strlen(primero) + strlen(operador) + strlen(segundo) + tipoLongitud + 2;
         char * buffer = malloc(bufferLongitud);

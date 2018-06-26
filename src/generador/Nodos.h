@@ -11,7 +11,8 @@ typedef enum {
   NODO_RETORNAR,
   NODO_INSTRUCCIONES,
   NODO_INSTRUCCION,
-  NODO_NEGACION
+  NODO_NEGACION,
+  NODO_IMPRIMIR
 } tipoNodo;
 
 typedef struct Nodo {
@@ -82,6 +83,11 @@ typedef struct NodoInstruccion {
 } NodoInstruccion;
 
 typedef struct NodoNegacion {
+  tipoNodo tipo;
+  Nodo * expresion;
+} NodoNegacion;
+
+typedef struct NodoImprimir {
   tipoNodo tipo;
   Nodo * expresion;
 } NodoNegacion;

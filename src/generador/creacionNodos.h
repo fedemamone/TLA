@@ -3,6 +3,9 @@
 
 #include "Nodos.h"
 
+#define TRUE 1
+#define FALSE 0
+
 NodoCadena * cadena(const char * cadena);
 NodoConstante * constante(const char * constante);
 NodoVariable * variable(const char * variable, Nodo * almacenado);

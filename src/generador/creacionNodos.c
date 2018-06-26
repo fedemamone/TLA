@@ -5,24 +5,25 @@
 NodoCadena * cadena(const char * cadena) {
   NodoCadena * nodo = malloc(sizeof(NodoCadena));
   nodo->tipo = NODO_CADENA;
-  nodo->valor = calloc(strlen(cadena) + 1, sizeof(char));
-  strcpy(nodo->valor, cadena);
+  nodo->cadena = calloc(strlen(cadena) + 1, sizeof(char));
+  strcpy(nodo->cadena, cadena);
   return nodo;
 }
 
 NodoConstante * constante(const char * constante) {
   NodoConstante * nodo = malloc(sizeof(NodoConstante));
   nodo->tipo = NODO_CONSTANTE;
-  nodo->valor = calloc(strlen(constante) + 1, sizeof(char));
-  strcpy(nodo->valor, constante);
+  nodo->constante = calloc(strlen(constante) + 1, sizeof(char));
+  strcpy(nodo->constante, constante);
   return nodo;
 }
 
-NodoVariable * variable(const char * variable, Nodo * almacenado) {
+NodoVariable * variable(const char * variable) {
   NodoVariable * nodo = malloc(sizeof(NodoVariable));
   nodo->tipo = NODO_VARIABLE;
+  nodo->almacenado = NULL;
+  nodo->declarado = FALSE;
   nodo->nombre = calloc(strlen(variable) + 1, sizeof(char));
-  nodo->almacenado = almacenado;
   strcpy(nodo->nombre, variable);
   return nodo;
 }

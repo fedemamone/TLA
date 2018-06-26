@@ -1,7 +1,7 @@
 #ifndef _GENERAR_CODIGO_C_H
 #define _GENERAR_CODIGO_C_H
 
-#include "structures.h"
+#include "creacionNodos.h"
 
 char * cadenaVacia = "";
 

@@ -20,18 +20,11 @@ char * reducirNodoConstante(Nodo * nodo) {
 
 char * reducirNodoVariable(Nodo * nodo) {
   char * nombre = ((NodoVariable *)nodo)->variable;
-  char * longitudPuntuacion = "!";
+  char * longitudPuntuacion = "_";
   char * nuevaVariable = calloc(strlen(nombre) + strlen(longitudPuntuacion) + 1, sizeof(char));
   
-  //agregado con agregado de tipoAlmacenado
-  if(((NodoVariable *)nodo)->almacenado->tipo == NODO_CONSTANTE)
-    strcpy(nuevaVariable, "int");
-  else
-    strcpy(nuevaVariable, "char* ");
-  //impacta en lo comentado en reducirNodoOperacion
-  
   strcpy(nuevaVariable, nombre);
-  strcat(nuevaVariable, "!");
+  strcat(nuevaVariable, "_");
 
   return nuevaVariable;
 }
@@ -43,27 +36,36 @@ char * reducirNodoOperacion(Nodo * nodo) {
   char * primero = eval(nodoValor->primero);
   char * segundo = eval(nodoValor->segundo);
   char * operador = nodoValor->operador;
-
+  char * buffer;
   
   if (nodoValor->primero->tipo == NODO_VARIABLE && strcmp(nodoValor->operador, "=") == 0) {
-      //if (nodoValor->segundo->tipo == NODO_CADENA) {
-        //const size_t tipoLongitud = strlen("char* ");
-        const size_t bufferLongitud = strlen(primero) + strlen(operador) + strlen(segundo) + tipoLongitud + 2;
-        char * buffer = malloc(bufferLongitud);
-        snprintf(buffer, bufferLongitud, "%s%s%s",primero, operador, segundo);
-        return buffer;
-      //}
-      //else {
-        //const size_t tipoLongitud = strlen("int ");
-        //const size_t bufferLongitud = strlen(primero) + strlen(operador) + strlen(segundo) + tipoLongitud + 2;
-        //char * buffer = malloc(bufferLongitud);
-        //snprintf(buffer, bufferLongitud, "int %s%s%s",primero, operador, segundo);
-        //return buffer;
+      if (nodoValor->primero->declarado == FALSE && (nodoValor->segundo->tipo == NODO_CADENA || (nodoValor->segundo->tipo == NODO_VARIABLE && nodoValor->segundo->almacenado != NULL && nodoValor->segundo->almacenado->tipo == NODO_CADENA))) {
+        nodoValor->primero->almacenado = nodoValor->segundo;
+        nodoValor->primero->declarado = TRUE;
+        const size_t tipoLongitud = strlen("char* ");
+        const size_t bufferLongitud = strlen(primero) + strlen(operador) + strlen(segundo) + tipoLongitud + 4;
+        buffer = malloc(bufferLongitud);
+        snprintf(buffer, bufferLongitud, "char* ");
       }
+      else if(nodoValor->primero->declarado == FALSE){
+        nodoValor->primero->almacenado = nodoValor->segundo;
+        nodoValor->primero->declarado = TRUE;
+        const size_t tipoLongitud = strlen("int ");
+        const size_t bufferLongitud = strlen(primero) + strlen(operador) + strlen(segundo) + tipoLongitud + 4; //el "_", " " y ";"
+        buffer = malloc(bufferLongitud);
+        snprintf(buffer, bufferLongitud, "int ");
+      }
+
+      strcat(buffer, primero);
+      strcat(buffer, "_ ");
+      strcat(buffer, operador);
+      strcat(buffer, segundo);
+      strcat(buffer, ";");
+
   } else {
     const size_t delimitadorLongitud = strlen("()");
     const size_t bufferLongitud = strlen(primero) + strlen(operador) + strlen(segundo) + delimitadorLongitud + 1;
-    char * buffer = malloc(bufferLongitud);
+    buffer = malloc(bufferLongitud);
     snprintf(buffer, bufferLongitud, "(%s%s%s)", primero, operador, segundo);
     return buffer;
   }

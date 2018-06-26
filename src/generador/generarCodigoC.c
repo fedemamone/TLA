@@ -186,10 +186,10 @@ char * reducirImprimir(Nodo * nodo) {
   
   char * parametroPrintf;
   
-  if(nodoValor->expresion->tipo == NODO_CONSTANTE)
-    parametroPrintf = "%d";
-  else
+  if(nodoValor->expresion->tipo == NODO_CADENA)
     parametroPrintf = "%s";
+  else
+    parametroPrintf = "%d";
 
   const size_t delimitadorLongitud = strlen("printf('', )") + 2; //2 de %s o %d
   const size_t bufferLongitud = strlen(expresion) + delimitadorLongitud + 1;

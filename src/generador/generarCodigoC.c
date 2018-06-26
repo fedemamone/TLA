@@ -179,6 +179,25 @@ char * reducirNegacion(Nodo * nodo) {
 
   return buffer;
 }
+//chequear
+char * reducirImprimir(Nodo * nodo) {
+  NodoImprimir * nodoValor = (NodoImprimir *)nodo;
+  char * expresion = eval(nodoValor->expresion);
+  
+  char * parametroPrintf;
+  
+  if(nodoValor->tipo == NODO_CONSTANTE)
+    parametroPrintf = "%d";
+  else
+    parametroPrintf = "%s";
+
+  const size_t delimitadorLongitud = strlen("printf('', )") + 2; //2 de %s o %d
+  const size_t bufferLongitud = strlen(expresion) + delimitadorLongitud + 1;
+  char * buffer = malloc(bufferLongitud, sizeof(char));
+  snprintf(buffer, bufferLongitud, "printf('%s', %s)", parametroPrintf,expresion); //Hay que decirle agarra el segundo %s
+
+  return buffer;
+}
 
 //Toma el nodo y llama al reductor correspondiente al tipo
 

@@ -17,5 +17,6 @@ NodoBloque * bloque(const NodoLista * instrucciones);
 Nodo * vacio();
 NodoInstruccion * instruccion(Nodo * instruccion);
 NodoNegacion * negacion(Nodo * expresion);
+NodoImprimir * imprimir(Nodo * expresion);
 
 #endif

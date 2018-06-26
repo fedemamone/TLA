@@ -18,11 +18,11 @@ NodoConstante * constante(const char * constante) {
   return nodo;
 }
 
-NodoVariable * variable(const char * variable, tipoNodo tipoVariable) {
+NodoVariable * variable(const char * variable, Nodo * almacenado) {
   NodoVariable * nodo = malloc(sizeof(NodoVariable));
   nodo->tipo = NODO_VARIABLE;
   nodo->nombre = calloc(strlen(variable) + 1, sizeof(char));
-  nodo->tipoAlmacenado = tipoVariable;
+  nodo->almacenado = almacenado;
   strcpy(nodo->nombre, variable);
   return nodo;
 }

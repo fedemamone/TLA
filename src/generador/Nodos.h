@@ -90,4 +90,4 @@ typedef struct NodoNegacion {
 typedef struct NodoImprimir {
   tipoNodo tipo;
   Nodo * expresion;
-} NodoNegacion;
+} NodoImprimir;

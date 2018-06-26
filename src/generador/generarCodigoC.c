@@ -186,7 +186,7 @@ char * reducirImprimir(Nodo * nodo) {
   
   char * parametroPrintf;
   
-  if(nodoValor->tipo == NODO_CONSTANTE)
+  if(nodoValor->expresion->tipo == NODO_CONSTANTE)
     parametroPrintf = "%d";
   else
     parametroPrintf = "%s";

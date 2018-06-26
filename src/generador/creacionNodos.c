@@ -115,3 +115,10 @@ NodoNegacion * negacion(Nodo * expresion) {
   nodo->expresion = expresion;
   return nodo;
 }
+
+NodoImprimir * imprimir(Nodo * expresion) {
+  NodoImprimir * nodo = malloc(sizeof(NodoImprimir));
+  nodo->tipo = NODO_IMPRIMIR;
+  nodo->expresion = expresion;
+  return nodo;
+}

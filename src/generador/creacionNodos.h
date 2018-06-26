@@ -5,7 +5,7 @@
 
 NodoCadena * cadena(const char * cadena);
 NodoConstante * constante(const char * constante);
-NodoVariable * variable(const char * variable);
+NodoVariable * variable(const char * variable, tipoNodo tipoVariable);
 NodoOperacion * operacion(const Nodo * primero, const Nodo * segundo, const char * operador);
 NodoCondicional * condicional(const Nodo * primero, const Nodo * segundo, const Nodo * tercero);
 NodoSi * si(const Nodo * condicion, const Nodo * entonces, const Nodo * sino);

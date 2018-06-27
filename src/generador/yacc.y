@@ -1,5 +1,5 @@
 %{
-	#include "./cracionNodos.h"
+	#include "./creacionNodos.h"
 	#include "./generarCodigoC.h"
 	#define NULL 0
 	extern int yylineno;
@@ -27,19 +27,19 @@
 %token ENTONCES
 %token SI SINO MIENTRAS RETORNAR IMPRIMIR
 
-%type <node> expresion_primaria expresion_derecha operacion_multiplicativa
-%type <node> operacion_aditiva operacion_relacional operacion_igualdad
-%type <node> operacion_logica_conj operacion_logica_disy operacion_cond
-%type <node> operacion_asignacion expresion bloque bloque_condicional
-%type <node> bloque_ciclo bloque_retorno bloque_imprimir
-%type <node> expresion_basica expresion_constante expresion_variable
+%type <nodo> expresion_primaria expresion_derecha operacion_multiplicativa
+%type <nodo> operacion_aditiva operacion_relacional operacion_igualdad
+%type <nodo> operacion_logica_conj operacion_logica_disy operacion_cond
+%type <nodo> operacion_asignacion expresion bloque bloque_condicional
+%type <nodo> bloque_ciclo bloque_retorno bloque_imprimir
+%type <nodo> expresion_basica expresion_constante expresion_variable
 
-%type <string> operador_asignacion operador_relacional ASIGNACION MULTI_ASIGNACION DIVIS_ASIGNACION SUMA_ASIGNACION RESTA_ASIGNACION
-%type <string> VARIABLE CADENA_LITERAL NUMERO
+%type <cadena> operador_asignacion operador_relacional ASIGNACION MULTI_ASIGNACION DIVIS_ASIGNACION SUMA_ASIGNACION RESTA_ASIGNACION
+%type <cadena> VARIABLE CADENA_LITERAL NUMERO
 
-%type <list> llaves lista_instrucciones
+%type <lista> llaves lista_instrucciones
 
-%parse-param {NodeList ** programa}
+%parse-param {NodoLista ** programa}
 
 %start lista_instrucciones
 
@@ -52,7 +52,7 @@ expresion_primaria:
 	;
 
 expresion_constante:
-	NUMERO { $$ = nuevoNodoConstante($1); }
+	NUMERO { $$ = constante($1); }
 	;
 
 expresion_variable:
@@ -112,7 +112,7 @@ operacion_logica_disy:
 
 operacion_cond:
 	  operacion_logica_disy { $$ = $1; }
-	| operacion_logica_disy ENTONCES expresion DOS_PUNTOS operacion_cond { $$ = operacionCond($1, $3, $5); }
+	| operacion_logica_disy ENTONCES expresion DOS_PUNTOS operacion_cond { $$ = condicional($1, $3, $5); }
 	;
 
 operacion_asignacion:
@@ -175,8 +175,7 @@ void yyerror(NodoLista ** programa, char *msg) {
   exit(1);
 }
 int main() {
-  int i;
-	
+
 	NodoLista * programa;
   int ret = yyparse(&programa);
 	if (ret == 1) {

@@ -2,7 +2,7 @@
 	#include <stdio.h>
 	#include <stdlib.h>
 	#include "creacionNodos.h"
-	#include "grammar.tab.h" 
+	#include "y.tab.h" 
 %}
 
 %option noyywrap
@@ -38,8 +38,8 @@ salida        ("salir")
 "("				{ return(PAREN_ABRE); }
 ")"				{ return(PAREN_CIERRA); }
 "!"				{ return(NEGACION); }
-"-"				{ return(MENOS); }
-"+"				{ return(MAS); }
+"-"				{ return(RESTA); }
+"+"				{ return(SUMA); }
 "/"				{ return(DIVIS); }
 "*"				{ return(MULTI); }
 "%"				{ return(MODULO); }

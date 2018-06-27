@@ -1,4 +1,8 @@
-typedef enum {
+#ifndef _NODOS_H
+#define _NODOS_H
+
+typedef enum
+{
   NODO_CADENA = 0,
   NODO_CONSTANTE,
   NODO_VARIABLE,
@@ -15,82 +19,98 @@ typedef enum {
   NODO_IMPRIMIR
 } tipoNodo;
 
-typedef struct Nodo {
+typedef struct Nodo
+{
   tipoNodo tipo;
 } Nodo;
 
-typedef struct NodoLista {
+typedef struct NodoLista
+{
   tipoNodo tipo;
-  Nodo * nodo;
-  struct NodoLista * siguiente;
+  Nodo *nodo;
+  struct NodoLista *siguiente;
 } NodoLista;
 
-typedef struct NodoCadena {
+typedef struct NodoCadena
+{
   tipoNodo tipo;
-  char * cadena;
+  char *cadena;
 } NodoCadena;
 
-typedef struct NodoConstante {
+typedef struct NodoConstante
+{
   tipoNodo tipo;
-  char * constante;
+  char *constante;
 } NodoConstante;
 
-typedef struct NodoVariable {
+typedef struct NodoVariable
+{
   tipoNodo tipo;
   int declarado;
-  char* nombre;
-  Nodo * almacenado;
-  char * variable;
+  char *nombre;
+  Nodo *almacenado;
+  char *variable;
 } NodoVariable;
 
-typedef struct NodoOperacion {
+typedef struct NodoOperacion
+{
   tipoNodo tipo;
-  Nodo * primero;
-  Nodo * segundo;
-  char * operador;
+  Nodo *primero;
+  Nodo *segundo;
+  char *operador;
 } NodoOperacion;
 
-typedef struct NodoCondicional {
+typedef struct NodoCondicional
+{
   tipoNodo tipo;
-  Nodo * primero;
-  Nodo * segundo;
-  Nodo * tercero;
+  Nodo *primero;
+  Nodo *segundo;
+  Nodo *tercero;
 } NodoCondicional;
 
-typedef struct NodoSi {
+typedef struct NodoSi
+{
   tipoNodo tipo;
-  Nodo * condicion;
-  Nodo * entonces;
-  Nodo * sino;
+  Nodo *condicion;
+  Nodo *entonces;
+  Nodo *sino;
 } NodoSi;
 
-typedef struct NodoMientras {
+typedef struct NodoMientras
+{
   tipoNodo tipo;
-  Nodo * condicion;
-  Nodo * bloque;
+  Nodo *condicion;
+  Nodo *bloque;
 } NodoMientras;
 
-typedef struct NodoRetornar {
+typedef struct NodoRetornar
+{
   tipoNodo tipo;
-  Nodo * expresion;
+  Nodo *expresion;
 } NodoRetornar;
 
-typedef struct NodoBloque {
+typedef struct NodoBloque
+{
   tipoNodo tipo;
-  NodoLista * instrucciones;
+  NodoLista *instrucciones;
 } NodoBloque;
 
-typedef struct NodoInstruccion {
+typedef struct NodoInstruccion
+{
   tipoNodo tipo;
-  Nodo * instruccion;
+  Nodo *instruccion;
 } NodoInstruccion;
 
-typedef struct NodoNegacion {
+typedef struct NodoNegacion
+{
   tipoNodo tipo;
-  Nodo * expresion;
+  Nodo *expresion;
 } NodoNegacion;
 
-typedef struct NodoImprimir {
+typedef struct NodoImprimir
+{
   tipoNodo tipo;
-  Nodo * expresion;
+  Nodo *expresion;
 } NodoImprimir;
+
+#endif

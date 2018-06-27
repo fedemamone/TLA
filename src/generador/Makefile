@@ -1,6 +1,6 @@
-TARGET = output
+TARGET = generador
 CC = gcc
-CFLAGS = -g -Wall
+CFLAGS = -w
 
 .PHONY: default all clean
 
@@ -14,7 +14,7 @@ HEADERS = $(wildcard *.h)
 		$(CC) $(CFLAGS) -c $< -o $@
 
 $(TARGET): $(OBJECTS)
-		$(CC) $(OBJECTS) -Wall -o $@
+		$(CC) $(OBJECTS) -w -o $@
 
 clean:
 		-rm -f *.o

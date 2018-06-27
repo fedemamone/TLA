@@ -185,6 +185,10 @@ int main() {
 		printf("%s", "No hay memoria suficiente");
 	}
 	
+	printf("#include <stdio.h>\n");
+	printf("#include <stdlib.h>\n\n");
+	printf("int main(int argc, char const *argv[])\n{\n");
 	printf("%s\n", generarCodigoC(programa));
+	printf("\nreturn 0;\n}");
 	return 0;
 }

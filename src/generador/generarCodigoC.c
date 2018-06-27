@@ -84,7 +84,9 @@ char *reducirNodoOperacion(Nodo *nodo)
   char *operador = nodoValor->operador;
   char *buffer;
 
-  if (nodoValor->primero->tipo == NODO_VARIABLE && strcmp(nodoValor->operador, "=") == 0)
+  if (nodoValor->primero->tipo == NODO_VARIABLE && strcmp(nodoValor->operador, "=") == 0
+     || strcmp(nodoValor->operador, "+=") == 0 || strcmp(nodoValor->operador, "-=") == 0
+     || strcmp(nodoValor->operador, "/=") == 0 || strcmp(nodoValor->operador, "*=") == 0)
   {
     variableDefinida *variable = buscarOCrearVariable(((NodoVariable *)nodoValor->primero)->nombre);
 
@@ -283,7 +285,7 @@ char *reducirImprimir(Nodo *nodo)
   const size_t delimitadorLongitud = strlen("printf('', );\n") + 2; //2 de %s o %d
   const size_t bufferLongitud = strlen(expresion) + delimitadorLongitud + 1;
   char *buffer = calloc(bufferLongitud, sizeof(char));
-  snprintf(buffer, bufferLongitud, "printf(%s, %s);\n", parametroPrintf, expresion);
+  snprintf(buffer, bufferLongitud, "printf(\"%s\", %s);\n", parametroPrintf, expresion);
 
   return buffer;
 }

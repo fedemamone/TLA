@@ -6,3 +6,11 @@
 src/generador/.vscode/
 
 src/generador/generador
+
+tests/
+
+!tests/ej1.dino
+!tests/ej2.dino
+!tests/ej3.dino
+!tests/ej4.dino
+!tests/ej5.dino

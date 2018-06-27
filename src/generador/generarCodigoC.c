@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include "generarCodigoC.h"
 
-char **variables;
+static variableDefinida variables[MAX_VARIABLES];
 
 typedef char *(*reductor)(Nodo *);
 
@@ -49,12 +49,30 @@ char *reducirNodoVariable(Nodo *nodo)
   strcpy(nuevaVariable, nombre);
   strcat(nuevaVariable, "_");
 
-  printf("PRINT NUEVA VARIABLE\n");
-
-  printf("%s\n\n", nuevaVariable);
-
-  printf("SALGO DE NODO VARIABLE\n");
   return nuevaVariable;
+}
+
+variableDefinida buscarOCrearVariable(char *nombreDeLaVariable)
+{
+  int i;
+  int encontrado;
+
+  for (i = 0, encontrado = 0; variables[i].nombre[0] != '0' && i < MAX_VARIABLES && !encontrado; i++)
+  {
+    if (strcmp(variables[i].nombre, nombreDeLaVariable) == 0)
+    {
+      encontrado = 1;
+      variables[i--].definida = 1;
+    }
+  }
+
+  if (!encontrado)
+  {
+    strcpy(variables[i].nombre, nombreDeLaVariable);
+    variables[i].definida = 0;
+  }
+
+  return variables[i];
 }
 
 char *reducirNodoOperacion(Nodo *nodo)
@@ -66,42 +84,34 @@ char *reducirNodoOperacion(Nodo *nodo)
   char *operador = nodoValor->operador;
   char *buffer;
 
-  printf("QUIERO IMPRIMIR MI NOMBRE DE VARIABLE: %s\n", ((NodoVariable *)nodoValor->primero)->nombre);
-
-  // int i = 0;
-  // while (variables[i] != 0)
-  // {
-  //   if ()
-  // }
-  // if (variables[i] == 0) {
-  //   printf("FEDE, SOS UN CAPO, ES CERO\n");
-  // }
-
-
-
   if (nodoValor->primero->tipo == NODO_VARIABLE && strcmp(nodoValor->operador, "=") == 0)
   {
+    variableDefinida variable = buscarOCrearVariable(((NodoVariable *)nodoValor->primero)->nombre);
 
     NodoVariable *nodoPrimero = (NodoVariable *)nodoValor->primero;
     NodoVariable *nodoSegundo = (NodoVariable *)nodoValor->segundo;
 
-    if (((NodoVariable *)nodo)->declarado == FALSE && (nodoValor->segundo->tipo == NODO_CADENA || (nodoValor->segundo->tipo == NODO_VARIABLE && nodoSegundo->almacenado != NULL && nodoSegundo->almacenado->tipo == NODO_CADENA)))
+    if ((nodoValor->segundo->tipo == NODO_CADENA || (nodoValor->segundo->tipo == NODO_VARIABLE && nodoSegundo->almacenado != NULL && nodoSegundo->almacenado->tipo == NODO_CADENA)))
     {
-      ((NodoVariable *)nodo)->almacenado = nodoValor->segundo;
-      ((NodoVariable *)nodo)->declarado = TRUE;
       const size_t tipoLongitud = strlen("char* ");
       const size_t bufferLongitud = strlen(primero) + strlen(operador) + strlen(segundo) + tipoLongitud + 4;
       buffer = malloc(bufferLongitud);
-      snprintf(buffer, bufferLongitud, "char* ");
+      if (variable.definida == 0)
+      {
+        snprintf(buffer, bufferLongitud, "char* ");
+      }
+      variable.tipo = NODO_CADENA;
     }
-    else if (((NodoVariable *)nodo)->declarado == FALSE)
+    else
     {
-      ((NodoVariable *)nodo)->almacenado = nodoValor->segundo;
-      ((NodoVariable *)nodo)->declarado = TRUE;
       const size_t tipoLongitud = strlen("int ");
       const size_t bufferLongitud = strlen(primero) + strlen(operador) + strlen(segundo) + tipoLongitud + 4; //el "_", " " y ";"
       buffer = malloc(bufferLongitud);
-      snprintf(buffer, bufferLongitud, "int ");
+      if (variable.definida == 0)
+      {
+        snprintf(buffer, bufferLongitud, "int ");
+      }
+      variable.tipo = NODO_CONSTANTE;
     }
 
     strcat(buffer, primero);
@@ -257,21 +267,13 @@ char *reducirImprimir(Nodo *nodo)
 {
   NodoImprimir *nodoValor = (NodoImprimir *)nodo;
   char *expresion = eval(nodoValor->expresion);
-
   char *parametroPrintf;
+  variableDefinida variable = buscarOCrearVariable(expresion);
 
-  Nodo *variable = nodoValor->expresion;
-
-  printf("QUE ES VARIABLE->TIPO: %i\n", variable->tipo);
-
-  if (variable->tipo == NODO_CADENA)
+  if (variable.tipo == NODO_CADENA)
     parametroPrintf = "%s";
   else
     parametroPrintf = "%d";
-
-  printf("ESTOY EN REDUCIR IMPRIMIR\n");
-  printf("%s\n", parametroPrintf);
-  printf("ESTOY EN REDUCIR IMPRIMIR\n");
 
   const size_t delimitadorLongitud = strlen("printf('', );\n") + 2; //2 de %s o %d
   const size_t bufferLongitud = strlen(expresion) + delimitadorLongitud + 1;
@@ -298,7 +300,11 @@ static char *eval(Nodo *nodo)
 
 char *generarCodigoC(Nodo *nodo)
 {
-  variables = (char **)calloc(1, sizeof(char *));
+  for (int i = 0; i < MAX_VARIABLES; i++)
+  {
+    memset(variables[i].nombre, '0', MAX_LONGITUD_NOMBRE_VARIABLE);
+  }
+
   char *codigo = eval(nodo);
 
   return codigo;

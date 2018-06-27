@@ -1,0 +1,14 @@
+a = 1
+b = 0
+c = "Bien!"
+d = "Mal!"
+
+si(!b && a){
+	si (a || b){
+		imprimir(c)
+	}sino{
+		imprimir(d)
+	}
+}sino{
+	imprimir(d)
+}

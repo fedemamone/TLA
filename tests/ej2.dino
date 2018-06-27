@@ -1,0 +1,9 @@
+origen = 3
+destino = 0
+
+mientras(origen > 0){
+	origen -= 1
+	destino += 1
+}
+
+imprimir(destino)

@@ -1,0 +1,11 @@
+a = 2
+b = 1
+resp = ""
+
+si(a < b){
+	resp = "menor"
+}sino{
+	resp = "mayor"
+}
+
+imprimir(resp)

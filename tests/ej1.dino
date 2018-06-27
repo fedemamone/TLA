@@ -1,0 +1,6 @@
+a = 1
+b = 2
+
+resultado = (a > b ? a : b)
+
+imprimir(resultado)

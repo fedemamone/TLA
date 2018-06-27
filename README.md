@@ -1,7 +1,7 @@
 ![alt text](http://dinopianito.com.ar/assets/img/top-logo.png)
 
 ## Documentación
-Se encuentra en el archivo `Informe de TLA.pdf`
+Se encuentra en el archivo `Informe TLA.pdf`
 
 ## Para ejecutar el proyecto
 

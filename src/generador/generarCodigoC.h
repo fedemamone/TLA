@@ -13,7 +13,7 @@ typedef struct variableDefinida
   int definida;
 } variableDefinida;
 
-variableDefinida buscarOCrearVariable(char *nombreDeLaVariable);
+variableDefinida *buscarOCrearVariable(char *nombreDeLaVariable);
 char *reducirNodoCadena(Nodo *nodo);
 char *reducirNodoConstante(Nodo *nodo);
 char *reducirNodoVariable(Nodo *nodo);

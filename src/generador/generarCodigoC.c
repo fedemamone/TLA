@@ -52,7 +52,7 @@ char *reducirNodoVariable(Nodo *nodo)
   return nuevaVariable;
 }
 
-variableDefinida buscarOCrearVariable(char *nombreDeLaVariable)
+variableDefinida *buscarOCrearVariable(char *nombreDeLaVariable)
 {
   int i;
   int encontrado;
@@ -72,7 +72,7 @@ variableDefinida buscarOCrearVariable(char *nombreDeLaVariable)
     variables[i].definida = 0;
   }
 
-  return variables[i];
+  return &variables[i];
 }
 
 char *reducirNodoOperacion(Nodo *nodo)
@@ -86,7 +86,7 @@ char *reducirNodoOperacion(Nodo *nodo)
 
   if (nodoValor->primero->tipo == NODO_VARIABLE && strcmp(nodoValor->operador, "=") == 0)
   {
-    variableDefinida variable = buscarOCrearVariable(((NodoVariable *)nodoValor->primero)->nombre);
+    variableDefinida *variable = buscarOCrearVariable(((NodoVariable *)nodoValor->primero)->nombre);
 
     NodoVariable *nodoPrimero = (NodoVariable *)nodoValor->primero;
     NodoVariable *nodoSegundo = (NodoVariable *)nodoValor->segundo;
@@ -96,22 +96,22 @@ char *reducirNodoOperacion(Nodo *nodo)
       const size_t tipoLongitud = strlen("char* ");
       const size_t bufferLongitud = strlen(primero) + strlen(operador) + strlen(segundo) + tipoLongitud + 4;
       buffer = malloc(bufferLongitud);
-      if (variable.definida == 0)
+      if (variable->definida == 0)
       {
         snprintf(buffer, bufferLongitud, "char* ");
       }
-      variable.tipo = NODO_CADENA;
+      variable->tipo = NODO_CADENA;
     }
     else
     {
       const size_t tipoLongitud = strlen("int ");
       const size_t bufferLongitud = strlen(primero) + strlen(operador) + strlen(segundo) + tipoLongitud + 4; //el "_", " " y ";"
       buffer = malloc(bufferLongitud);
-      if (variable.definida == 0)
+      if (variable->definida == 0)
       {
         snprintf(buffer, bufferLongitud, "int ");
       }
-      variable.tipo = NODO_CONSTANTE;
+      variable->tipo = NODO_CONSTANTE;
     }
 
     strcat(buffer, primero);
@@ -268,9 +268,14 @@ char *reducirImprimir(Nodo *nodo)
   NodoImprimir *nodoValor = (NodoImprimir *)nodo;
   char *expresion = eval(nodoValor->expresion);
   char *parametroPrintf;
-  variableDefinida variable = buscarOCrearVariable(expresion);
 
-  if (variable.tipo == NODO_CADENA)
+  char *p = malloc(strlen(expresion) * sizeof(char));
+  strcpy(p, expresion);
+  p[strlen(p) - 1] = 0;
+
+  variableDefinida *variable = buscarOCrearVariable(p);
+
+  if (variable->tipo == NODO_CADENA)
     parametroPrintf = "%s";
   else
     parametroPrintf = "%d";
@@ -278,7 +283,7 @@ char *reducirImprimir(Nodo *nodo)
   const size_t delimitadorLongitud = strlen("printf('', );\n") + 2; //2 de %s o %d
   const size_t bufferLongitud = strlen(expresion) + delimitadorLongitud + 1;
   char *buffer = calloc(bufferLongitud, sizeof(char));
-  snprintf(buffer, bufferLongitud, "printf('%s', %s);\n", parametroPrintf, expresion);
+  snprintf(buffer, bufferLongitud, "printf(%s, %s);\n", parametroPrintf, expresion);
 
   return buffer;
 }

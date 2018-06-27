@@ -19,7 +19,7 @@
 %token CONJ_OP DISY_OP MULTI_ASIGNACION DIVIS_ASIGNACION
 %token RESTA_ASIGNACION ASIGNACION SUMA_ASIGNACION
 %token PAREN_ABRE PAREN_CIERRA
-%token LLAVE_ABRE LLAVE_CIERRA
+%token LLAVE_ABIERTA LLAVE_CERRADA
 %token DOS_PUNTOS COMA
 %token MULTI MODULO DIVIS SUMA RESTA
 %token MENOR MAYOR
@@ -45,7 +45,6 @@
 
 %%
 
-// Terminals for an expression
 expresion_primaria:
 	  expresion_constante { $$ = $1; }
 	| CADENA_LITERAL { $$ = cadena($1); }
@@ -53,7 +52,8 @@ expresion_primaria:
 	;
 
 expresion_constante:
-	NUMBER { $$ = nuevoNodoConstante($1); }
+	NUMERO { $$ = nuevoNodoConstante($1); }
+	;
 
 expresion_variable:
 	VARIABLE { $$ = variable($1); }
@@ -137,13 +137,14 @@ bloque:
 	| bloque_condicional { $$ = $1; }
 	| bloque_ciclo { $$ = $1; }
 	| bloque_retorno { $$ = $1; }
+	| bloque_imprimir { $$ = $1; }
 	| expresion  { $$ = instruccion($1); }
 	| LINEA_NUEVA { $$ = vacio(); }
 	;
 
 llaves:
-	  LLAVES_ABRE LLAVES_CIERRA { $$ = listaInstrucciones(NULL); }
-	| LLAVES_ABRE lista_instrucciones LLAVES_CIERRA { $$ = $2; }
+	  LLAVE_ABIERTA LLAVE_CERRADA { $$ = listaInstrucciones(NULL); }
+	| LLAVE_ABIERTA lista_instrucciones LLAVE_CERRADA { $$ = $2; }
 	;
 
 lista_instrucciones:
@@ -153,7 +154,7 @@ lista_instrucciones:
 
 bloque_condicional:
 	  SI PAREN_ABRE expresion PAREN_CIERRA llaves { $$ = si($3, $5, NULL); }
-	| IF PARENS_ABRE expresion PARENS_CIERRA llaves SINO llaves { $$ = si($3, $5, $7); }
+	| SI PAREN_ABRE expresion PAREN_CIERRA llaves SINO llaves { $$ = si($3, $5, $7); }
 	;
 
 bloque_ciclo:
@@ -165,18 +166,18 @@ bloque_retorno:
 	;
 
 bloque_imprimir:
-	IMPRIMIR expresion { $$ = imprimir($2)}
+	IMPRIMIR PAREN_ABRE expresion PAREN_CIERRA { $$ = imprimir($3); }
 	;
 
 %%
-void yyerror(NodeList ** programa, char *msg) {
-  printf("%s on line %d\n\n", msg, yylineno);
+void yyerror(NodoLista ** programa, char *msg) {
+  printf("%s en la linea %d\n\n", msg, yylineno);
   exit(1);
 }
 int main() {
   int i;
-	// We store the AST in this program variable.
-	NodeList * programa;
+	
+	NodoLista * programa;
   int ret = yyparse(&programa);
 	if (ret == 1) {
 		printf("%s", "Hubo un error en el parsing del programa.");
@@ -184,7 +185,7 @@ int main() {
 	} else if (ret == 2) {
 		printf("%s", "No hay memoria suficiente");
 	}
-	// Print the final compiled code
+	
 	printf("%s\n", generarCodigoC(programa));
 	return 0;
 }

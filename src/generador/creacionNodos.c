@@ -18,13 +18,13 @@ NodoConstante * constante(const char * constante) {
   return nodo;
 }
 
-NodoVariable * variable(const char * variable) {
+NodoVariable * variable(const char * var) {
   NodoVariable * nodo = malloc(sizeof(NodoVariable));
   nodo->tipo = NODO_VARIABLE;
   nodo->almacenado = NULL;
   nodo->declarado = FALSE;
-  nodo->nombre = calloc(strlen(variable) + 1, sizeof(char));
-  strcpy(nodo->nombre, variable);
+  nodo->nombre = calloc(strlen(var) + 1, sizeof(char));
+  strcpy(nodo->nombre, var);
   return nodo;
 }
 
@@ -60,9 +60,9 @@ NodoSi * si(const Nodo * condicion, const Nodo * entonces, const Nodo * sino) {
 
 NodoMientras * mientras(const Nodo * condicion, const Nodo * bloque) {
   NodoMientras * nodo = malloc(sizeof(NodoMientras));
-  node->tipo = NODO_MIENTRAS;
-  node->condicion = (Nodo *)  condicion;
-  node->bloque = (Nodo *)  bloque;
+  nodo->tipo = NODO_MIENTRAS;
+  nodo->condicion = (Nodo *)  condicion;
+  nodo->bloque = (Nodo *)  bloque;
   return nodo;
 }
 
@@ -77,7 +77,7 @@ NodoLista * listaInstrucciones(const Nodo * nodo) {
 NodoLista * agregarInstruccion(const NodoLista * lista, const Nodo * nodo) {
   NodoLista * nodoActual = (NodoLista *)lista;
   while (nodoActual->siguiente != NULL) nodoActual = nodoActual->siguiente;
-  nodoActual->siguiente = newInstructionsList(nodo);
+  nodoActual->siguiente = listaInstrucciones(nodo);
 
   return (NodoLista *)lista;
 }

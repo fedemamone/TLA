@@ -22,7 +22,7 @@ typedef struct Nodo {
 typedef struct NodoLista {
   tipoNodo tipo;
   Nodo * nodo;
-  struct NodoList * siguiente;
+  struct NodoLista * siguiente;
 } NodoLista;
 
 typedef struct NodoCadena {

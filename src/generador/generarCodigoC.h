@@ -7,22 +7,6 @@ char * cadenaVacia = "";
 
 typedef char * (* reductor)(Nodo *);
 
-reductor reductores[] = {
-  reducirNodoCadena,
-  reducirNodoConstante,
-  reducirNodoVariable,
-  reducirNodoOperacion,
-  reducirNodoCondicional,
-  reducirNodoBloque,
-  reducirNodoVacio,
-  reducirSi,
-  reducirMientras,
-  reducirRetornar,
-  reducirInstrucciones,
-  reducirInstruccion,
-  reducirNegacion,
-  reducirImprimir
-};
 
 char * reducirNodoCadena(Nodo * nodo);
 char * reducirNodoConstante(Nodo * nodo);
@@ -42,4 +26,20 @@ char * reducirImprimir(Nodo * nodo);
 static char * eval(Nodo * nodo);
 char * generarCodigoC(Nodo * nodo);
 
+reductor reductores[] = {
+  reducirNodoCadena,
+  reducirNodoConstante,
+  reducirNodoVariable,
+  reducirNodoOperacion,
+  reducirNodoCondicional,
+  reducirNodoBloque,
+  reducirNodoVacio,
+  reducirSi,
+  reducirMientras,
+  reducirRetornar,
+  reducirInstrucciones,
+  reducirInstruccion,
+  reducirNegacion,
+  reducirImprimir
+};
 #endif

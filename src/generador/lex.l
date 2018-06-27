@@ -1,13 +1,13 @@
-/*%{
+%{
 	#include <stdio.h>
 	#include <stdlib.h>
 	#include "creacionNodos.h"
-	#include "grammar.tab.h" //////?????????
-%}*/
+	#include "grammar.tab.h" 
+%}
 
-//%option noyywrap
+%option noyywrap
 
-//digit       [0-9]
+digito       [0-9]
 cadena			\"[^\"]*\"
 numero      -?[0-9]+(\.[0-9]+)?
 variable  [a-zA-Z]+
@@ -46,9 +46,9 @@ salida        ("salir")
 "<"				{ return(MENOR); }
 ">"				{ return(MAYOR); }
 "?"				{ return(ENTONCES); }
-{numero}        { strcpy(yylval.string, yytext); return NUMERO; }	//ver .string
-{variable}    	{ strcpy(yylval.string, yytext); return VARIABLE; }				//ver .string
-{cadena}		{ strcpy(yylval.string, yytext); return CADENA_LITERAL; }		//ver .string
+{numero}        { strcpy(yylval.cadena, yytext); return NUMERO; }	
+{variable}    	{ strcpy(yylval.cadena, yytext); return VARIABLE; }		
+{cadena}		{ strcpy(yylval.cadena, yytext); return CADENA_LITERAL; }
 {lineanueva}    { yylineno++; return LINEA_NUEVA; }
 .				{ /* ignorar los demas caracteres */ }
 

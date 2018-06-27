@@ -1,0 +1,8 @@
+*.o
+*.yy.c
+*.tab.c
+*.tab.h
+
+src/generador/.vscode/
+
+src/generador/generador
